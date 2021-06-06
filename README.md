@@ -27,9 +27,9 @@ Contains information concerning Global Parameters. Notably does not contain info
 15 bytes in total. First two bytes always `E4 01`
 
 ## Keycodes
-From the sixteenth byte onwards, everything Contains information on the keypad it's programming.
+From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 1280 bytes(`0x0E04`)
 
-First two bytes `E4 02`
+First two bytes `E4 02` indicate a new Key
 
 Third byte is the key number `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
 
@@ -37,13 +37,11 @@ Fourth/Fifth byte (???) (something to do with macro modes)
 
 Sixth byte is the key number repeated. `00`
 
-Beyond this point is the data for Level 1 and Level 2 macros.
-Each is prepended by the length of the data, including the null terminator at the end. To indicate no keystrokes, a null terminator is used for the entire data, then the next data in concatenated.
+Beyond this point is the data for Level 1 and Level 2 macros. Each is prepended by the length of the data, including the null terminator at the end. The maximum length for key data is 220 strokes for a single macro (`DD` including null terminator) or 111 for two levels of macro. (`70` each, including the null terminator). To indicate no keystrokes, a null terminator is used for the entire data, then the next data in concatenated.
 Example:
 `04 1B 1B 1B 00 03 1C 1C 00`
 
-`04` indicates the the next `04` bytes are the keystrokes for the Level 1 Macro. The data is `1B 1B 1B 00` (`s s s 00`).
-The Level 2 Macro the immediately follows. `03` indicates the length of the data, `1C 1C 00` (`a a 00`).
+`04` indicates that the next `04` bytes are the keystrokes for the Level 1 Macro. The data is `1B 1B 1B 00` (`s s s 00`).
+The Level 2 Macro immediately follows. `03` indicates the length of the data, `1C 1C 00` (`a a 00`).
 
-The next keycode then begins immediately at the top again.
-After everything is defined, a final `E5` terminates the file.
+The next keycode then begins immediately, with the `E4 02 xx` separator. After everything is defined, a final `E5` terminates the file.

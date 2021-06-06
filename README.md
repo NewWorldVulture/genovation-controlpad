@@ -24,7 +24,13 @@ There are 5 control characters in the binary:
 # Format of Binary
 ## Header
 Contains information concerning Global Parameters. Notably does not contain information on number of keys or model.
-15 bytes in total. First two bytes always `E4 01`
+15 bytes in total. First give  bytes always `E4 01 0C E0 70`
+
+Next four bytes (`5`-`8`) mark out macro toggling keys. First two toggle, second two Shift. "None" is indicated by `80`.
+
+Next three bytes control, in order, number of keys allowed to be pressed at once, (???), and milliseconds between strokes (halved).
+
+Next three are LED Functions. Explained later. ()
 
 ## Keycodes
 From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 229 bytes(`0xE5`)

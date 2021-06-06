@@ -28,15 +28,20 @@ Contains information concerning Global Parameters. Notably does not contain info
 
 ## Keycodes
 From the sixteenth byte onwards, everything Contains information on the keypad it's programming.
+
 First two bytes `E4 02`
-Third byte key number `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
+
+Third byte is the key number `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
+
 Fourth/Fifth byte (???) (something to do with macro modes)
-Sixth byte key number repeated. `00`
+
+Sixth byte is the key number repeated. `00`
 
 Beyond this point is the data for Level 1 and Level 2 macros.
 Each is prepended by the length of the data, including the null terminator at the end. To indicate no keystrokes, a null terminator is used for the entire data, then the next data in concatenated.
 Example:
 `04 1B 1B 1B 00 03 1C 1C 00`
+
 `04` indicates the the next `04` bytes are the keystrokes for the Level 1 Macro. The data is `1B 1B 1B 00` (`s s s 00`).
 The Level 2 Macro the immediately follows. `03` indicates the length of the data, `1C 1C 00` (`a a 00`).
 

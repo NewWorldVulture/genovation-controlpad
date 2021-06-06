@@ -2,13 +2,6 @@
 Description of Genovation Keypad binaries and configuration process
 The Genovation Controlpad CPxx series is programmed by scancodes following, for the most part the AT Keyboard Scan Codes (Set 2). See https://webdocs.cs.ualberta.ca/~amaral/courses/329/labs/scancodes.html
 
-# Sticking Points
-The are a few notable additions/changes worth mentioning. After the `.ckd` file is compiled to a `.bin`, a few codes change:
- * `F0` ("release" code) -> changes to `E3`. The standard defines `F0 12` as "release left shift". In the `.bin` format, this will change to `E3 12` with no other indication.
- * `E2 01 {pp}` = "Delay `pp` × 4 milliseconds" e.g. `E2 01 0A` => Delay 40 milliseconds (`0A` = dec. 10)
- * * Maximum Value is `7d` (500 milliseconds). Longer delays are created by chaining these together.
- * The "Description" is completely dropped
-
 # Control Characters
 There are 5 control characters in the binary:
 * `E0` -> Control character used for "special keys" (explained in https://webdocs.cs.ualberta.ca/~amaral/courses/329/labs/scancodes.html)
@@ -51,3 +44,10 @@ Example:
 The Level 2 Macro immediately follows. `03` indicates the length of the data, `1C 1C 00` (`a a 00`).
 
 The next keycode then begins immediately, with the `E4 02 xx` separator. After everything is defined, a final `E5` terminates the file.
+
+# Sticking Points
+The are a few notable additions/changes worth mentioning. After the `.ckd` file is compiled to a `.bin`, a few codes change:
+ * `F0` ("release" code) -> changes to `E3`. The standard defines `F0 12` as "release left shift". In the `.bin` format, this will change to `E3 12` with no indication that it has done so.
+ * `E2 01 {pp}` = "Delay `pp` × 4 milliseconds" e.g. `E2 01 0A` => Delay 40 milliseconds (`0A` = dec. 10)
+ * * Maximum Value is `7d` (500 milliseconds). Longer delays are created by chaining these together.
+ * The "Description" is completely dropped

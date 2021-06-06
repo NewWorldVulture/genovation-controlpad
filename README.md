@@ -27,7 +27,7 @@ Contains information concerning Global Parameters. Notably does not contain info
 15 bytes in total. First two bytes always `E4 01`
 
 ## Keycodes
-From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 1280 bytes(`0x0E04`)
+From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 229 bytes(`0xE5`)
 
 First two bytes `E4 02` indicate a new Key
 

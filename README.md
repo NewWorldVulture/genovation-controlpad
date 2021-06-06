@@ -6,12 +6,12 @@ The Genovation Controlpad CPxx series is programmed by scancodes following, for 
 There are 5 control characters in the binary:
 * `E0` -> Control character used for "special keys" (explained in https://webdocs.cs.ualberta.ca/~amaral/courses/329/labs/scancodes.html)
 * `E2` -> Control character for something the keypad does. Action defined by next byte
-** `E2 01` -> Delay, as described above
-** `E2 (04|05|06)` -> Controls LED on keypad
+* * `E2 01` -> Delay, as described above
+* * `E2 (04|05|06)` -> Controls LED on keypad
 * `E3` -> Control character used to indicate "release" of following keycode, described above
 * `E4` -> Separator character in binary
-** `E4 01` marks the header
-** `E4 02` delineates the next Key (indexing starts with KEY0 `00`)
+* * `E4 01` marks the header
+* * `E4 02` delineates the next Key (indexing starts with KEY0 `00`)
 * `E5` -> Terminator character. When this is sent to the keypad, it closes the usb connection and restarts itself with the new configuration.
 
 # Format of Binary

@@ -6,7 +6,7 @@ The Genovation Controlpad CPxx series is programmed by scancodes following, for 
 The are a few notable additions/changes worth mentioning. After the `.ckd` file is compiled to a `.bin`, a few codes change:
  * `F0` ("release" code) -> changes to `E3`. The standard defines `F0 12` as "release left shift". In the `.bin` format, this will change to `E3 12` with no other indication.
  * `E2 01 {pp}` = "Delay `pp` * 4 milliseconds" e.g. `E2 01 0A` => Delay 40 milliseconds (`0A` = dec. 10)
- ** Maximum Value is `7d` (500 milliseconds). Longer delays are created by chaining these together.
+ * * Maximum Value is `7d` (500 milliseconds). Longer delays are created by chaining these together.
  * The "Description" is completely dropped
 
 # Control Characters

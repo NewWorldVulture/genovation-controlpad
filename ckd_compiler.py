@@ -75,11 +75,13 @@ class KeyMacro:
 			pass
 
 		# Returns macro in nice list format
+		# Level 1 Macro Data
 		self.l1_macro_data = self._macro_parser(raw_info[6])
 		if len(self.l1_macro_data) > 1:
 			# If it's an empty string, we leave this blank `[]`
 			# Otherwise, each macro  is pre-pended with the length of its data
 			self.l1_data_length = [len(self.l1_macro_data)]
+			print(str(self.keynum[0]) +" l1: "+ str(len(self.l1_macro_data)))
 			# The last bit of macro_options is whether any data is written for this macro
 			self.l1_macro_options[0] += 0b0001
 
@@ -88,7 +90,8 @@ class KeyMacro:
 		if len(self.l2_macro_data) > 1:
 		# If it's an empty string, we leave this blank `[]`
 			# Otherwise, each macro  is pre-pended with the length of its data
-			self.l2_data_length = [len(self.l1_macro_data)]
+			self.l2_data_length = [len(self.l2_macro_data)]
+			print(str(self.keynum[0]) +" l2: "+ str(len(self.l2_macro_data)))
 			# The last bit of macro_options is whether any data is written for this macro
 			self.l2_macro_options[0] += 0b0001
 

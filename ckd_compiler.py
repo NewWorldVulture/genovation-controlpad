@@ -170,4 +170,4 @@ def main(filename):
 		new_filename.write(bytes((0xE5,))) # Terminator
 
 
-main("wsAFE1_07_01.ckd")
+main("sample_ckd.ckd")

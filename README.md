@@ -1,6 +1,6 @@
 # Genovation ControlPads Details
 Description of Genovation Keypad binaries and configuration process
-The Genovation Controlpad CPxx series is programmed by scancodes following, for the most part the AT Keyboard Scan Codes (Set 2). See https://webdocs.cs.ualberta.ca/~amaral/courses/329/labs/scancodes.html
+The Genovation Controlpad CPxx series is programmed by scancodes following, PS/2 Keyboard Scan Codes. See https://webdocs.cs.ualberta.ca/~amaral/courses/329/labs/scancodes.html
 
 # Control Characters
 There are 5 control characters in the binary:

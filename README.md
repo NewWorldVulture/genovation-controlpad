@@ -22,15 +22,15 @@ Contains information concerning Global Parameters. Notably does not contain info
 15 bytes in total. First five bytes are always `E4 01 0C E0 70`. `E0 70` is the code for "Insert", but no other write mode seems to work in these bytes.
 
 
-Bytes `0x5` and `0x6` dictate which keys are used as "Macro Toggle" keys. After these are pressed, all further keys pressed input their Level 2 Macro, similar to the way a Caps Lock key works. The keys are counted indexed at `0x00`
+Bytes `0x5` and `0x6` dictate which keys are used as **Macro Toggle** keys. After these are pressed, all further keys pressed input their Level 2 Macro, similar to the way a Caps Lock key works. The keys are counted indexed at `0x00`, left-to-right, top-to-bottom. A value of `80` indicates an unused slot.
 
-Bytes `0x7`, `0x8` dictate the "Macro Shift" keys. 
+Bytes `0x7`, `0x8` dictate the **Macro Shift** keys. All the same rules for Macro Toggle Keys Applies here
 
-`0x9` controls Key-Rollover. This dictates how many keys can be pressed at once. This must be at least `02` for the Macro Shift keys to work as intended.
+`0x9` controls **Key-Rollover**. This dictates how many keys can be pressed at once. This must be at least `02` for the Macro Shift keys to work as intended.
 
-`0xA` has no known function.
+`0xA` has no known function, and is always `00`.
 
-`0xB` dictates Character Pacing. This number is in milliseconds, and is doubled on the keypad. e.g. a value of `04` would mean a eight millisecond gap between characters.
+`0xB` dictates Character Pacing. This number is in milliseconds, and is doubled on the keypad. e.g. a value of `04` would mean a eight millisecond gap between characters being typed.
 
 `0xC`, `0xD`, `0xE` control the LED Functions. These control which LEDs are powered and under what circumstances. The CP24 only has one LED, and therefore only reads the first value. There are seven  possible values:
 1. `00` for no function
@@ -41,9 +41,9 @@ Bytes `0x7`, `0x8` dictate the "Macro Shift" keys.
 6. `05` to indicate power
 7. `06` to indicate Scroll Lock
 
-## Keycodes
-From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 229 bytes(`0xE5`)
+`0xF` onwards indicates the start of a new key definition
 
+## Keycodes
 First two bytes `E4 02` indicate a new Key
 
 Third byte is the key number `00`, `01`,... `0A`, etc. (Indexing starts with `00`)

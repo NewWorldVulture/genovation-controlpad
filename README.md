@@ -44,22 +44,24 @@ Bytes `0x7`, `0x8` dictate the **Macro Shift** keys. All the same rules for Macr
 `0xF` onwards indicates the start of a new key definition
 
 ## Keycodes
-First two bytes `E4 02` indicate a new Key
+![image](https://user-images.githubusercontent.com/49806198/121881780-8b709680-ccc4-11eb-9b6c-33c117ea7a61.png)
 
-Third byte is the key number `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
+First two bytes `E4 02` indicate the next **Key Definition**.
 
-Fourth/Fifth byte (???) (something to do with macro modes)
+`0x02` and `0x04` are both the **Key Number** `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
 
-Sixth byte is the key number repeated. `00`
+`0x03` holds the options for the Level 2 Macro for this key. The first four bits are never used. The fifth marks the Separate Up Codes mode (only used when it only types one character). Sixth marks "Literal Mode". This is explained in full detail in the CP24 `MacroMasterCPxx.pdf` that comes with Genovation MacroMasterCPxx. Seventh bit marks "Auto-Repeat" (If the key is held down, the macro repeats over and over). Eighth marks whether the macro is active. If the macro has no data, this is `0`.
 
-Beyond this point is the data for Level 1 and Level 2 macros. Each is prepended by the length of the data, including the null terminator at the end. The maximum length for key data is 220 strokes for a single macro (`DD` including null terminator) or 111 for two levels of macro. (`70` each, including the null terminator). To indicate no keystrokes, a null terminator is used for the entire data, then the next data in concatenated.
+`0x04` holds the options for the LEvel 1 Macro for this key.
+
+Beyond this point is the data for Level 1 and Level 2 macros. Each is prepended by the length of the data, including the null terminator at the end. The maximum length for key data is 220 strokes for a single macro, or 111 strokes for two levels of macro. To indicate no keystrokes, a null terminator is used for the entire data, then the next data is concatenated.
 Example:
 `04 1B 1B 1B 00 03 1C 1C 00`
 
 `04` indicates that the next `04` bytes are the keystrokes for the Level 1 Macro. The data is `1B 1B 1B 00` (`s s s 00`).
 The Level 2 Macro immediately follows. `03` indicates the length of the data, `1C 1C 00` (`a a 00`).
 
-The next keycode then begins immediately, with the `E4 02 xx` separator. After everything is defined, a final `E5` terminates the file.
+The next keycode then begins immediately, with the same `E4 02` separator. After everything is defined, a final `E5` terminates the file.
 
 # Sticking Points
 The are a few notable additions/changes worth mentioning. After the `.ckd` file is compiled to a `.bin`, a few codes change:

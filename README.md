@@ -32,13 +32,14 @@ Bytes `0x7`, `0x8` dictate the "Macro Shift" keys.
 
 `0xB` dictates Character Pacing. This number is in milliseconds, and is doubled on the keypad. e.g. a value of `04` would mean a eight millisecond gap between characters.
 
-`0xC`, `0xD`, `0xE` control the LED Functions. These control which LEDs are powered and under what circumstances. The CP24 only has one LED, and therefore only reads the first value. There are six possible values:
+`0xC`, `0xD`, `0xE` control the LED Functions. These control which LEDs are powered and under what circumstances. The CP24 only has one LED, and therefore only reads the first value. There are seven  possible values:
 1. `00` for no function
 2. `01` to indicate Caps Lock
 3. `02` to indicate Num Lock
 4. `03` to indicate Level Indicator (LED on when L2 macros are active)
-5. `04` to indicate power
-6. `05` to indicate Scroll Lock
+5. `04` to indicate Host/Macro Control
+6. `05` to indicate power
+7. `06` to indicate Scroll Lock
 
 ## Keycodes
 From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 229 bytes(`0xE5`)

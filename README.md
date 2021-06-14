@@ -48,7 +48,7 @@ Bytes `0x7`, `0x8` dictate the **Macro Shift** keys. All the same rules for Macr
 
 First two bytes `E4 02` indicate the next **Key Definition**.
 
-`0x02` and `0x04` are both the **Key Number** `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
+`0x02` and `0x05` are both the **Key Number** `00`, `01`,... `0A`, etc. (Indexing starts with `00`)
 
 `0x03` holds the options for the Level 2 Macro for this key. The first four bits are never used. The fifth marks the Separate Up Codes mode (only used when it only types one character). Sixth marks "Literal Mode". This is explained in full detail in the CP24 `MacroMasterCPxx.pdf` that comes with Genovation MacroMasterCPxx. Seventh bit marks "Auto-Repeat" (If the key is held down, the macro repeats over and over). Eighth marks whether the macro is active. If the macro has no data, this is `0`.
 

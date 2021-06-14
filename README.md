@@ -16,14 +16,29 @@ There are 5 control characters in the binary:
 
 # Format of Binary
 ## Header
+![image](https://user-images.githubusercontent.com/49806198/121860320-97049300-ccad-11eb-8af4-c5dbdf97658e.png)
+
 Contains information concerning Global Parameters. Notably does not contain information on number of keys or model.
-15 bytes in total. First give  bytes always `E4 01 0C E0 70`
+15 bytes in total. First five bytes are always `E4 01 0C E0 70`. `E0 70` is the code for "Insert", but no other write mode seems to work in these bytes.
 
-Next four bytes (`5`-`8`) mark out macro toggling keys. First two toggle, second two Shift. "None" is indicated by `80`.
 
-Next three bytes control, in order, number of keys allowed to be pressed at once, (???), and milliseconds between strokes (halved).
+Bytes `0x5` and `0x6` dictate which keys are used as "Macro Toggle" keys. After these are pressed, all further keys pressed input their Level 2 Macro, similar to the way a Caps Lock key works. The keys are counted indexed at `0x00`
 
-Next three are LED Functions. Explained later. ()
+Bytes `0x7`, `0x8` dictate the "Macro Shift" keys. 
+
+`0x9` controls Key-Rollover. This dictates how many keys can be pressed at once. This must be at least `02` for the Macro Shift keys to work as intended.
+
+`0xA` has no known function.
+
+`0xB` dictates Character Pacing. This number is in milliseconds, and is doubled on the keypad. e.g. a value of `04` would mean a eight millisecond gap between characters.
+
+`0xC`, `0xD`, `0xE` control the LED Functions. These control which LEDs are powered and under what circumstances. The CP24 only has one LED, and therefore only reads the first value. There are six possible values:
+1. `0x00` for no function
+2. `0x01` to indicate Caps Lock
+3. `0x02` to indicate Num Lock
+4. `0x03` to indicate Level Indicator (LED on when L2 macros are active)
+5. `0x04` to indicate power
+6. `0x05` to indicate Scroll Lock
 
 ## Keycodes
 From the sixteenth byte onwards, everything contains key data for a single Key. The Maximum byte length for a single key is 229 bytes(`0xE5`)

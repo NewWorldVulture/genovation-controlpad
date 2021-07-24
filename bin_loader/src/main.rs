@@ -21,13 +21,16 @@ fn main() -> io::Result<()> {
     let (vid, pid) = (0x1125, 0x1807);
     let device = api.open(vid, pid).unwrap();
 
-    //println!("Opened device: {:#?}", device);
+    for byte in &buffer {
+        let sm_buff = [0u8, 1u8, *byte, 0u8, 0u8, 0u8];
+        let result = device.send_feature_report(&sm_buff);
 
-    let result = device.write(&buffer);
-    match result {
-        Ok(bytes) => { println!("Wrote: {:?} bytes", bytes) },
-        Err(e) => { eprintln!("{:?}", e) },
+        match result {
+            Ok(bytes) => { println!("Wrote: {:?} bytes", bytes) },
+            Err(e) => { eprintln!("{:?}", e) },
     }
+    }
+
 
     Ok(())
 }

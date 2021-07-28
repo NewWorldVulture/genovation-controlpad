@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-# COPYRIGHT (c) AMAZON.COM. All Rights Reserved
-# Created by Ada MacLurg (maclurb@)
-# Documentation at https://github.com/NewWorldVulture/genovation-controlpad
+# Created by Ada
 
 
 class GlobalOptions:

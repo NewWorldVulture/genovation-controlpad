@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Created by Ada
+# Created by Ada MacLurg (NewWorldVulture)
 
 
 class GlobalOptions:
@@ -11,14 +11,16 @@ class GlobalOptions:
 		self.macro_toggle_keys = [0x80, 0x80]
 		self.macro_shift_keys =  [0x80, 0x80]
 
+		global_data = {line.split('=')[0]:line.split('=')[1] for line in raw_info[1:]}
+
 		# This number isn't used anywhere explicitly
 		# We only need it to know the number of key macros to compile
-		self.number_of_keys = int(raw_info[2].split('=')[1])
+		self.number_of_keys = int(global_data['Number_Of_Keys'])
 
-		self.n_key_rollover = [int(raw_info[3].split('=')[1], 16)]
+		self.n_key_rollover = [int(global_data['Key_Roll_Over'], 16)]
 		self.null_spacer = [0x00]	# Unknown Function
-		self.char_pacing = [int(raw_info[7].split('=')[1], 16)]
-		self.led_functions = [int(raw_info[x].split('=')[-1], 16) for x in (4,5,6)]
+		self.char_pacing = [int(global_data['Character_Pacing'], 16)]
+		self.led_functions = [int(global_data[f"LED{x}_Function"], 16) for x in ('', '2', '3')]
 
 		self.fields = [self.file_header,
 			self.macro_toggle_keys,
@@ -67,12 +69,14 @@ class KeyMacro:
 		self.l2_data_length = []
 		self.l2_macro_options = [0x00]
 
+		key_info = {line.split('=')[0]:line.split('=')[1] for line in raw_info[1:]}
+
 		# KeyType 1 signifies "Macro Shift" key
-		if raw_info[1].endswith('1'):
+		if key_info['KeyType'] == '1':
 			if self.keynum[0] < global_options.number_of_keys:
 				global_options.add_macro_shift_key(self.keynum[0])
 		# KeyType 2 signifies "Macro Toggle" key
-		elif raw_info[1].endswith('2'):
+		elif key_info['KeyType'] == '2':
 			if self.keynum[0] < global_options.number_of_keys:
 				global_options.add_macro_toggle_key(self.keynum[0])
 		else:
@@ -80,28 +84,26 @@ class KeyMacro:
 
 		# Returns macro in nice list format
 		# Level 1 Macro Data
-		self.l1_macro_data = self._macro_parser(raw_info[6])
+		self.l1_macro_data = self._macro_parser(key_info['Level_1_Codes'])
 		if len(self.l1_macro_data) > 1:
 			# If it's an empty string, we leave this blank
 			# Otherwise, each macro is pre-pended with the length of its data
 			self.l1_data_length = [len(self.l1_macro_data)]
-			print(str(self.keynum[0]) +" l1: "+ str(len(self.l1_macro_data)))
 			# The final bit of macro_options is whether any data is written for this macro
 			self.l1_macro_options[0] += 0b0001
 
-		self.l2_macro_data = self._macro_parser(raw_info[7])
+		self.l2_macro_data = self._macro_parser(key_info['Level_2_Codes'])
 		if len(self.l2_macro_data) > 1:
 			# Each macro is pre-pended with the length of its data
 			# ... unless it has a length of 0
 			self.l2_data_length = [len(self.l2_macro_data)]
-			print(str(self.keynum[0]) +" l2: "+ str(len(self.l2_macro_data)))
 			# The last bit of macro_options is whether any data is written for this macro
 			self.l2_macro_options[0] += 0b0001
 
 		# Second to last bit flipped by Auto-Repeat
-		if raw_info[2].endswith('1'):
+		if key_info['L1_AutoRepeat'].endswith('1'):
 			self.l1_macro_options[0] += 0b0010
-		if raw_info[3].endswith('1'):
+		if key_info['L2_AutoRepeat'].endswith('1'):
 			self.l2_macro_options[0] += 0b0010
 
 		# The bits flipped here are according to the MacroMode of the macro
@@ -111,8 +113,9 @@ class KeyMacro:
 			'1': 0b1000,	# Separate Up Codes
 			'2': 0b0000,	# Macro Mode
 			'3': 0b0100}	# Literal Mode
-		self.l1_macro_options[0] += macro_mode_lookup_table[raw_info[4].split('=')[1]]
-		self.l2_macro_options[0] += macro_mode_lookup_table[raw_info[5].split('=')[1]]
+		
+		self.l1_macro_options[0] += macro_mode_lookup_table[key_info['L1_MacroMode']]
+		self.l2_macro_options[0] += macro_mode_lookup_table[key_info['L2_MacroMode']]
 
 		self.fields = [self.opening,
 			self.keynum,
@@ -125,18 +128,17 @@ class KeyMacro:
 			self.l2_macro_data,
 		]
 	
-	def _macro_parser(self, raw_line):
+	def _macro_parser(self, raw_codes):
 		""" Parses out the macro into individual bytes and puts it in the format GENOVATION wants """
-		line = raw_line.split('=')[1]
 		# Split string into groups of two characters
-		line = [int(line[x:x+2], 16) for x in range(0, len(line), 2)]
-		# In the compiled files, 0xF0 is replaced with 0xE3. This is undocumented.
-		for c, val in enumerate(line):
+		codes = [int(raw_codes[x:x+2], 16) for x in range(0, len(raw_codes), 2)]
+		# In the compiled files, 0xF0 is replaced with 0xE3.
+		for c, val in enumerate(codes):
 			if val == 0xF0:
-				line[c] = 0xE3
+				codes[c] = 0xE3
 		# All macros are null terminated. If the macro is blank, just returns a null.
-		line = line + [0x00]
-		return line
+		codes = codes + [0x00]
+		return codes
 
 	def add_compiled_info(self, file):
 		""" Called to write data to passed-in file """

@@ -1,4 +1,5 @@
 // Created by NewWorldVulture (Ada MacLurg)
+// 
 
 
 extern crate hidapi;
@@ -18,9 +19,10 @@ fn main() -> io::Result<()> {
     f.read_to_end(&mut buffer)?;
 
     let api = hidapi::HidApi::new().unwrap();
-    // Select GENOVATION Keypad by VendorID, ProductID
+    // Select GENOVATION Keypad by VendorID (0x1125 - Genovation),
+    // and Product ID (0x1807 - ControlPad CP24)
     // If I ever need to program a different product
-    // ...we need to change the values here
+    // ...we just need to change the values here
     let (vid, pid) = (0x1125, 0x1807);
     let device = api.open(vid, pid).unwrap();
 
